@@ -83,7 +83,7 @@ void sigHandler(int signo)
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        NSLog(@"Daemon running");
+        NSLog(@"Headphones daemon running!");
 
         signal(SIGHUP, sigHandler);
         signal(SIGTERM, sigHandler);
@@ -116,7 +116,9 @@ int main(int argc, const char * argv[]) {
             AudioObjectGetPropertyData(defaultDevice, inAddresses, 0, NULL, &bDataSourceIdSize, &bDataSourceId);
             if (bDataSourceId == 'ispk') {
                 // Recognized as internal speakers
-                NSLog(@"Headphones removed");
+                NSLog(@"Headphones removed! Fixing!");
+                NSString *output1 = [@"hda-verb 0x18 SET_PIN_WIDGET_CONTROL 0x20" runAsCommand];
+                NSString *output2 = [@"hda-verb 0x1a SET_PIN_WIDGET_CONTROL 0x20" runAsCommand];
             } else if (bDataSourceId == 'hdpn') {
                 // Recognized as headphones
                 NSLog(@"Headphones inserted! Fixing!");
